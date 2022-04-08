@@ -6,13 +6,13 @@ import UIKit
     // TODO: Mark the ViewController as conforming to the UITextFieldDelegate Protocol
 class ConversionViewController: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet var celsiusLabel: UILabel!
     @IBOutlet var textField: UITextField!
+    @IBOutlet weak var celsiusTextView: UITextField!
     
     //ViewController Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateCelsiusLabel()
+        updateCelsiusTextView()
     }
     // Keyboard disappears when tapping the screen somewhere else
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
@@ -37,8 +37,8 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     
 
     @IBAction func textFieldDidBeginEditing(_ textField: UITextField) {
-            celsiusLabel.text = "?"
-        celsiusLabel.textColor = UIColor.init(red: 0.6, green: 0.6, blue: 0.4, alpha: 1.0)
+            celsiusTextView.text = "?"
+        celsiusTextView.textColor = UIColor.init(red: 0.6, green: 0.6, blue: 0.4, alpha: 1.0)
         }
     
     // DELEGATE METHOD : textFieldDidBeginEditing - is called when the user selects the text field
@@ -58,7 +58,7 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     //Stored Properties for Fahrenheit Temperature Measurement w/Observer
     var fahrenheitValue: Measurement<UnitTemperature>? {
         didSet { // this property observer will run after the property is assigned a value
-            updateCelsiusLabel()
+            updateCelsiusTextView()
         }
     }
     //Computed Property for Celsius Temperature Measurement (Read only property - getter without setter)
@@ -70,11 +70,11 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
         }
     }
     // Helper Functions
-    func updateCelsiusLabel() {
+    func updateCelsiusTextView() {
         if let celsiusValue = celsiusValue {
-            celsiusLabel.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
+            celsiusTextView.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
         } else {
-            celsiusLabel.text = "???"
+            celsiusTextView.text = "???"
         }
     }
     // Limits the number of decimal places in the output label to 1
