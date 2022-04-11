@@ -35,6 +35,20 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func celsiusTextField(celsiusTextView: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+       //let letters = NSCharacterSet.letters
+        let existingTextHasDecimalSeparator = celsiusTextView.text?.range(of: ".")
+        let replacementTextHasDecimalSeparator = string.range(of: ".")
+        let replacementTextHasletters = string.rangeOfCharacter(from: .letters)
+        
+        if existingTextHasDecimalSeparator != nil || replacementTextHasDecimalSeparator != nil || replacementTextHasletters != nil{
+            return false
+        } else {
+            return true
+        }
+    }
+    
 
     @IBAction func textFieldDidBeginEditing(_ textField: UITextField) {
             celsiusTextView.text = "?"
@@ -57,8 +71,10 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     }
     //Stored Properties for Fahrenheit Temperature Measurement w/Observer
     var fahrenheitValue: Measurement<UnitTemperature>? {
-        didSet { // this property observer will run after the property is assigned a value
-            updateCelsiusTextView()
+        if let celsiusValue = celsiusValue {
+            return celsiusValue.converted(to: .fahrenheit)
+        } else {
+            return nil
         }
     }
     //Computed Property for Celsius Temperature Measurement (Read only property - getter without setter)
@@ -75,6 +91,14 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
             celsiusTextView.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
         } else {
             celsiusTextView.text = "???"
+        }
+    }
+    
+    func updatefahrenheitTextView() {
+        if let fahrenheitValue = fahrenheitValue {
+            textField.text = numberFormatter.string(from: NSNumber(value: textField.value))
+        } else {
+            textField.text = "???"
         }
     }
     // Limits the number of decimal places in the output label to 1
